@@ -1,0 +1,1 @@
+(ins)aaron@blackarcher ~/go/src/github.com/moby/buildkit $ cat /home/aaron/.glide/cache/src/https-github.com-fatih-color/vendor/golang.org/x/sys/unix/linux/Dockerfile | ./dockerfile2llb | buildctl debug dump-llb | jq -s . | yj -jy

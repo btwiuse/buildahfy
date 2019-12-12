@@ -1,0 +1,360 @@
+- Digest: sha256:04187b885604d112762d71717a1346cbc4f17e131fc82857a048019e04951455
+  Op:
+    Op:
+      Source:
+        identifier: docker-image://docker.io/library/ubuntu:16.04
+    constraints: {}
+    platform:
+      Architecture: amd64
+      OS: linux
+  OpMetadata:
+    caps:
+      source.image: true
+    description:
+      com.docker.dockerfile.v1.command: FROM ubuntu:16.04
+      llb.customname: '[1/11] FROM docker.io/library/ubuntu:16.04'
+- Digest: sha256:1db51786efcba43a2c69f343144a1b9710548c89fd6469991a6bbfe36b69c2e4
+  Op:
+    Op:
+      Exec:
+        meta:
+          args:
+          - /bin/sh
+          - -c
+          - echo 'deb http://en.archive.ubuntu.com/ubuntu/ artful main universe' >>
+            /etc/apt/sources.list
+          cwd: /
+          env:
+          - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        mounts:
+        - dest: /
+          input: 0
+          output: 0
+    constraints: {}
+    inputs:
+    - digest: sha256:04187b885604d112762d71717a1346cbc4f17e131fc82857a048019e04951455
+      index: 0
+    platform:
+      Architecture: amd64
+      OS: linux
+  OpMetadata:
+    caps:
+      exec.meta.base: true
+      exec.meta.setsdefaultpath: true
+      exec.mount.bind: true
+    description:
+      com.docker.dockerfile.v1.command: RUN echo 'deb http://en.archive.ubuntu.com/ubuntu/
+        artful main universe' >> /etc/apt/sources.list
+      llb.customname: '[2/11] RUN echo ''deb http://en.archive.ubuntu.com/ubuntu/
+        artful main universe'' >> /etc/apt/sources.list'
+- Digest: sha256:b1af176689f4cd507817eaf9ec6597315b9100c3850919bba3ba8d60147cfd03
+  Op:
+    Op:
+      Exec:
+        meta:
+          args:
+          - /bin/sh
+          - -c
+          - apt-get update && apt-get install -y         curl         git     && rm
+            -rf /var/lib/apt/lists/*
+          cwd: /
+          env:
+          - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        mounts:
+        - dest: /
+          input: 0
+          output: 0
+    constraints: {}
+    inputs:
+    - digest: sha256:1db51786efcba43a2c69f343144a1b9710548c89fd6469991a6bbfe36b69c2e4
+      index: 0
+    platform:
+      Architecture: amd64
+      OS: linux
+  OpMetadata:
+    caps:
+      exec.meta.base: true
+      exec.meta.setsdefaultpath: true
+      exec.mount.bind: true
+    description:
+      com.docker.dockerfile.v1.command: RUN apt-get update && apt-get install -y         curl         git     &&
+        rm -rf /var/lib/apt/lists/*
+      llb.customname: '[3/11] RUN apt-get update && apt-get install -y         curl         git     &&
+        rm -rf /var/lib/apt/lists/*'
+- Digest: sha256:8bf1f7d837180fa90852545f64fd06c5897e80010f37bfccb19934d1d61b61a0
+  Op:
+    Op:
+      File:
+        actions:
+        - Action:
+            Mkdir:
+              makeParents: true
+              mode: 493
+              path: /git
+              timestamp: -1
+          input: 0
+          output: 0
+          secondaryInput: -1
+    constraints: {}
+    inputs:
+    - digest: sha256:b1af176689f4cd507817eaf9ec6597315b9100c3850919bba3ba8d60147cfd03
+      index: 0
+    platform:
+      Architecture: amd64
+      OS: linux
+  OpMetadata:
+    caps:
+      file.base: true
+    description:
+      llb.customname: '[4/11] WORKDIR /git'
+- Digest: sha256:0e318e6af7b7fb34f0b205bc43092dbbb034e619b5dea36e5928bf763e1ed5f4
+  Op:
+    Op:
+      Exec:
+        meta:
+          args:
+          - /bin/sh
+          - -c
+          - git config --global advice.detachedHead false
+          cwd: /git
+          env:
+          - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        mounts:
+        - dest: /
+          input: 0
+          output: 0
+    constraints: {}
+    inputs:
+    - digest: sha256:8bf1f7d837180fa90852545f64fd06c5897e80010f37bfccb19934d1d61b61a0
+      index: 0
+    platform:
+      Architecture: amd64
+      OS: linux
+  OpMetadata:
+    caps:
+      exec.meta.base: true
+      exec.meta.setsdefaultpath: true
+      exec.mount.bind: true
+    description:
+      com.docker.dockerfile.v1.command: RUN git config --global advice.detachedHead
+        false
+      llb.customname: '[5/11] RUN git config --global advice.detachedHead false'
+- Digest: sha256:ec8ac4bb384726d3b122cb24c33ee3709b7732161a2a848f9ff44e3859a837cf
+  Op:
+    Op:
+      Exec:
+        meta:
+          args:
+          - /bin/sh
+          - -c
+          - git clone --branch v4.13 --depth 1 https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux
+          cwd: /git
+          env:
+          - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        mounts:
+        - dest: /
+          input: 0
+          output: 0
+    constraints: {}
+    inputs:
+    - digest: sha256:0e318e6af7b7fb34f0b205bc43092dbbb034e619b5dea36e5928bf763e1ed5f4
+      index: 0
+    platform:
+      Architecture: amd64
+      OS: linux
+  OpMetadata:
+    caps:
+      exec.meta.base: true
+      exec.meta.setsdefaultpath: true
+      exec.mount.bind: true
+    description:
+      com.docker.dockerfile.v1.command: RUN git clone --branch v4.13 --depth 1 https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux
+      llb.customname: '[6/11] RUN git clone --branch v4.13 --depth 1 https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux'
+- Digest: sha256:353ae2926e5aa218bd7a3cb2efc38c35d053e7a6b15403071ad00a31b646a3a6
+  Op:
+    Op:
+      Exec:
+        meta:
+          args:
+          - /bin/sh
+          - -c
+          - git clone --branch glibc-2.26 --depth 1 git://sourceware.org/git/glibc.git
+          cwd: /git
+          env:
+          - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        mounts:
+        - dest: /
+          input: 0
+          output: 0
+    constraints: {}
+    inputs:
+    - digest: sha256:ec8ac4bb384726d3b122cb24c33ee3709b7732161a2a848f9ff44e3859a837cf
+      index: 0
+    platform:
+      Architecture: amd64
+      OS: linux
+  OpMetadata:
+    caps:
+      exec.meta.base: true
+      exec.meta.setsdefaultpath: true
+      exec.mount.bind: true
+    description:
+      com.docker.dockerfile.v1.command: RUN git clone --branch glibc-2.26 --depth
+        1 git://sourceware.org/git/glibc.git
+      llb.customname: '[7/11] RUN git clone --branch glibc-2.26 --depth 1 git://sourceware.org/git/glibc.git'
+- Digest: sha256:c5de9bc21272b1bca8da1a335a70a3459e49bb75abe570fc04489870c21d98c5
+  Op:
+    Op:
+      Exec:
+        meta:
+          args:
+          - /bin/sh
+          - -c
+          - curl -fsSL "$GOLANG_DOWNLOAD_URL" -o golang.tar.gz     && echo "$GOLANG_DOWNLOAD_SHA256  golang.tar.gz"
+            | sha256sum -c -     && tar -C /usr/local -xzf golang.tar.gz     && rm
+            golang.tar.gz
+          cwd: /git
+          env:
+          - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          - GOLANG_VERSION=1.9.2
+          - GOLANG_DOWNLOAD_URL=https://golang.org/dl/go1.9.2.linux-amd64.tar.gz
+          - GOLANG_DOWNLOAD_SHA256=de874549d9a8d8d8062be05808509c09a88a248e77ec14eb77453530829ac02b
+        mounts:
+        - dest: /
+          input: 0
+          output: 0
+    constraints: {}
+    inputs:
+    - digest: sha256:353ae2926e5aa218bd7a3cb2efc38c35d053e7a6b15403071ad00a31b646a3a6
+      index: 0
+    platform:
+      Architecture: amd64
+      OS: linux
+  OpMetadata:
+    caps:
+      exec.meta.base: true
+      exec.meta.setsdefaultpath: true
+      exec.mount.bind: true
+    description:
+      com.docker.dockerfile.v1.command: RUN curl -fsSL "$GOLANG_DOWNLOAD_URL" -o golang.tar.gz     &&
+        echo "$GOLANG_DOWNLOAD_SHA256  golang.tar.gz" | sha256sum -c -     && tar
+        -C /usr/local -xzf golang.tar.gz     && rm golang.tar.gz
+      llb.customname: '[8/11] RUN curl -fsSL "https://golang.org/dl/go1.9.2.linux-amd64.tar.gz"
+        -o golang.tar.gz     && echo "de874549d9a8d8d8062be05808509c09a88a248e77ec14eb77453530829ac02b  golang.tar.gz"
+        | sha256sum -c -     && tar -C /usr/local -xzf golang.tar.gz     && rm golang.tar.gz'
+- Digest: sha256:4661bd9b9bacec01b6e092d61d3c759bf2ff0c992a738dc0136b674bf7b1d7ee
+  Op:
+    Op:
+      Exec:
+        meta:
+          args:
+          - /bin/sh
+          - -c
+          - apt-get update && apt-get install -y         gawk make python         gcc
+            gcc-multilib         gettext texinfo     && rm -rf /var/lib/apt/lists/*
+          cwd: /git
+          env:
+          - GOLANG_VERSION=1.9.2
+          - GOLANG_DOWNLOAD_URL=https://golang.org/dl/go1.9.2.linux-amd64.tar.gz
+          - GOLANG_DOWNLOAD_SHA256=de874549d9a8d8d8062be05808509c09a88a248e77ec14eb77453530829ac02b
+          - PATH=/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        mounts:
+        - dest: /
+          input: 0
+          output: 0
+    constraints: {}
+    inputs:
+    - digest: sha256:c5de9bc21272b1bca8da1a335a70a3459e49bb75abe570fc04489870c21d98c5
+      index: 0
+    platform:
+      Architecture: amd64
+      OS: linux
+  OpMetadata:
+    caps:
+      exec.meta.base: true
+      exec.meta.setsdefaultpath: true
+      exec.mount.bind: true
+    description:
+      com.docker.dockerfile.v1.command: RUN apt-get update && apt-get install -y         gawk
+        make python         gcc gcc-multilib         gettext texinfo     && rm -rf
+        /var/lib/apt/lists/*
+      llb.customname: '[9/11] RUN apt-get update && apt-get install -y         gawk
+        make python         gcc gcc-multilib         gettext texinfo     && rm -rf
+        /var/lib/apt/lists/*'
+- Digest: sha256:694ecdc009f327061cda5a7233d3efb07e43f9914e24df2fe3277cc2a6c44655
+  Op:
+    Op:
+      Exec:
+        meta:
+          args:
+          - /bin/sh
+          - -c
+          - apt-get update && apt-get install -y         qemu         gcc-aarch64-linux-gnu       gcc-arm-linux-gnueabi             gcc-mips-linux-gnu          gcc-mips64-linux-gnuabi64         gcc-mips64el-linux-gnuabi64
+            gcc-mipsel-linux-gnu              gcc-powerpc64-linux-gnu     gcc-powerpc64le-linux-gnu         gcc-s390x-linux-gnu         gcc-sparc64-linux-gnu         &&
+            rm -rf /var/lib/apt/lists/*
+          cwd: /git
+          env:
+          - GOLANG_VERSION=1.9.2
+          - GOLANG_DOWNLOAD_URL=https://golang.org/dl/go1.9.2.linux-amd64.tar.gz
+          - GOLANG_DOWNLOAD_SHA256=de874549d9a8d8d8062be05808509c09a88a248e77ec14eb77453530829ac02b
+          - PATH=/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        mounts:
+        - dest: /
+          input: 0
+          output: 0
+    constraints: {}
+    inputs:
+    - digest: sha256:4661bd9b9bacec01b6e092d61d3c759bf2ff0c992a738dc0136b674bf7b1d7ee
+      index: 0
+    platform:
+      Architecture: amd64
+      OS: linux
+  OpMetadata:
+    caps:
+      exec.meta.base: true
+      exec.meta.setsdefaultpath: true
+      exec.mount.bind: true
+    description:
+      com.docker.dockerfile.v1.command: RUN apt-get update && apt-get install -y         qemu         gcc-aarch64-linux-gnu       gcc-arm-linux-gnueabi             gcc-mips-linux-gnu          gcc-mips64-linux-gnuabi64         gcc-mips64el-linux-gnuabi64
+        gcc-mipsel-linux-gnu              gcc-powerpc64-linux-gnu     gcc-powerpc64le-linux-gnu         gcc-s390x-linux-gnu         gcc-sparc64-linux-gnu         &&
+        rm -rf /var/lib/apt/lists/*
+      llb.customname: '[10/11] RUN apt-get update && apt-get install -y         qemu         gcc-aarch64-linux-gnu       gcc-arm-linux-gnueabi             gcc-mips-linux-gnu          gcc-mips64-linux-gnuabi64         gcc-mips64el-linux-gnuabi64
+        gcc-mipsel-linux-gnu              gcc-powerpc64-linux-gnu     gcc-powerpc64le-linux-gnu         gcc-s390x-linux-gnu         gcc-sparc64-linux-gnu         &&
+        rm -rf /var/lib/apt/lists/*'
+- Digest: sha256:548a37aff5033df482e8784c59381f70d73b4525b52954569a07628524690b48
+  Op:
+    Op:
+      File:
+        actions:
+        - Action:
+            Mkdir:
+              makeParents: true
+              mode: 493
+              path: /build
+              timestamp: -1
+          input: 0
+          output: 0
+          secondaryInput: -1
+    constraints: {}
+    inputs:
+    - digest: sha256:694ecdc009f327061cda5a7233d3efb07e43f9914e24df2fe3277cc2a6c44655
+      index: 0
+    platform:
+      Architecture: amd64
+      OS: linux
+  OpMetadata:
+    caps:
+      file.base: true
+    description:
+      llb.customname: '[11/11] WORKDIR /build'
+- Digest: sha256:91e6edc7e0e372e8e24476e3ffe0192b5fb43550b22ad7ac99abe514aafe9c31
+  Op:
+    Op: null
+    inputs:
+    - digest: sha256:548a37aff5033df482e8784c59381f70d73b4525b52954569a07628524690b48
+      index: 0
+  OpMetadata:
+    caps:
+      constraints: true
+      meta.description: true
+      platform: true
