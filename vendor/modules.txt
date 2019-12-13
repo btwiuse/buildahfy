@@ -1,0 +1,133 @@
+# github.com/Microsoft/go-winio v0.4.13-0.20190408173621-84b4ab48a507
+github.com/Microsoft/go-winio
+# github.com/Microsoft/hcsshim v0.8.5
+github.com/Microsoft/hcsshim
+github.com/Microsoft/hcsshim/internal/guestrequest
+github.com/Microsoft/hcsshim/internal/guid
+github.com/Microsoft/hcsshim/internal/hcs
+github.com/Microsoft/hcsshim/internal/hcserror
+github.com/Microsoft/hcsshim/internal/hns
+github.com/Microsoft/hcsshim/internal/interop
+github.com/Microsoft/hcsshim/internal/logfields
+github.com/Microsoft/hcsshim/internal/longpath
+github.com/Microsoft/hcsshim/internal/mergemaps
+github.com/Microsoft/hcsshim/internal/safefile
+github.com/Microsoft/hcsshim/internal/schema1
+github.com/Microsoft/hcsshim/internal/schema2
+github.com/Microsoft/hcsshim/internal/timeout
+github.com/Microsoft/hcsshim/internal/wclayer
+# github.com/btwiuse/pretty v0.0.0-20190401073227-519ff4ea1882
+github.com/btwiuse/pretty
+# github.com/containerd/containerd v1.3.0-0.20190507210959-7c1e88399ec0
+github.com/containerd/containerd/archive/compression
+github.com/containerd/containerd/containers
+github.com/containerd/containerd/content
+github.com/containerd/containerd/errdefs
+github.com/containerd/containerd/filters
+github.com/containerd/containerd/gc
+github.com/containerd/containerd/identifiers
+github.com/containerd/containerd/images
+github.com/containerd/containerd/labels
+github.com/containerd/containerd/leases
+github.com/containerd/containerd/log
+github.com/containerd/containerd/metadata
+github.com/containerd/containerd/metadata/boltutil
+github.com/containerd/containerd/mount
+github.com/containerd/containerd/namespaces
+github.com/containerd/containerd/platforms
+github.com/containerd/containerd/reference
+github.com/containerd/containerd/remotes
+github.com/containerd/containerd/remotes/docker
+github.com/containerd/containerd/remotes/docker/schema1
+github.com/containerd/containerd/snapshots
+github.com/containerd/containerd/sys
+github.com/containerd/containerd/version
+# github.com/docker/distribution v2.7.1-0.20190205005809-0d3efadf0154+incompatible
+github.com/docker/distribution/digestset
+github.com/docker/distribution/reference
+github.com/docker/distribution/registry/api/errcode
+# github.com/docker/docker v1.14.0-0.20190319215453-e7b5f7dbe98c
+github.com/docker/docker/api/types/blkiodev
+github.com/docker/docker/api/types/container
+github.com/docker/docker/api/types/mount
+github.com/docker/docker/api/types/strslice
+github.com/docker/docker/pkg/locker
+github.com/docker/docker/pkg/signal
+# github.com/docker/go-connections v0.3.0
+github.com/docker/go-connections/nat
+# github.com/docker/go-units v0.3.1
+github.com/docker/go-units
+# github.com/ghodss/yaml v1.0.0
+github.com/ghodss/yaml
+# github.com/gogo/protobuf v1.2.0
+github.com/gogo/protobuf/gogoproto
+github.com/gogo/protobuf/proto
+github.com/gogo/protobuf/protoc-gen-gogo/descriptor
+github.com/gogo/protobuf/sortkeys
+github.com/gogo/protobuf/types
+# github.com/golang/protobuf v1.2.0
+github.com/golang/protobuf/proto
+github.com/golang/protobuf/ptypes
+github.com/golang/protobuf/ptypes/any
+github.com/golang/protobuf/ptypes/duration
+github.com/golang/protobuf/ptypes/timestamp
+# github.com/google/shlex v0.0.0-20150127133951-6f45313302b9
+github.com/google/shlex
+# github.com/konsorten/go-windows-terminal-sequences v1.0.1
+github.com/konsorten/go-windows-terminal-sequences
+# github.com/moby/buildkit v0.6.3
+github.com/moby/buildkit/client/llb
+github.com/moby/buildkit/client/llb/imagemetaresolver
+github.com/moby/buildkit/frontend/dockerfile/command
+github.com/moby/buildkit/frontend/dockerfile/dockerfile2llb
+github.com/moby/buildkit/frontend/dockerfile/instructions
+github.com/moby/buildkit/frontend/dockerfile/parser
+github.com/moby/buildkit/frontend/dockerfile/shell
+github.com/moby/buildkit/frontend/gateway/client
+github.com/moby/buildkit/identity
+github.com/moby/buildkit/solver/pb
+github.com/moby/buildkit/util/apicaps
+github.com/moby/buildkit/util/apicaps/pb
+github.com/moby/buildkit/util/appcontext
+github.com/moby/buildkit/util/contentutil
+github.com/moby/buildkit/util/imageutil
+github.com/moby/buildkit/util/leaseutil
+github.com/moby/buildkit/util/system
+# github.com/opencontainers/go-digest v1.0.0-rc1
+github.com/opencontainers/go-digest
+# github.com/opencontainers/image-spec v1.0.1
+github.com/opencontainers/image-spec/specs-go
+github.com/opencontainers/image-spec/specs-go/v1
+# github.com/opencontainers/runc v1.0.1-0.20190307181833-2b18fe1d885e
+github.com/opencontainers/runc/libcontainer/system
+github.com/opencontainers/runc/libcontainer/user
+# github.com/pkg/errors v0.8.1
+github.com/pkg/errors
+# github.com/po3rin/dockerdot v0.0.0-20190905190707-07ce17e04517
+github.com/po3rin/dockerdot/docker2dot
+github.com/po3rin/dockerdot/dockerfile2llb
+# github.com/sirupsen/logrus v1.3.0
+github.com/sirupsen/logrus
+# github.com/tonistiigi/fsutil v0.0.0-20190819224149-3d2716dd0a4d
+github.com/tonistiigi/fsutil/types
+# go.etcd.io/bbolt v1.3.2
+go.etcd.io/bbolt
+# golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2
+golang.org/x/crypto/ssh/terminal
+# golang.org/x/net v0.0.0-20190311183353-d8887717615a
+golang.org/x/net/context
+golang.org/x/net/context/ctxhttp
+# golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
+golang.org/x/sync/errgroup
+golang.org/x/sync/semaphore
+# golang.org/x/sys v0.0.0-20190614160838-b47fdc937951
+golang.org/x/sys/unix
+golang.org/x/sys/windows
+# google.golang.org/genproto v0.0.0-20180817151627-c66870c02cf8
+google.golang.org/genproto/googleapis/rpc/status
+# google.golang.org/grpc v1.20.1
+google.golang.org/grpc/codes
+google.golang.org/grpc/metadata
+google.golang.org/grpc/status
+# gopkg.in/yaml.v2 v2.2.1
+gopkg.in/yaml.v2
