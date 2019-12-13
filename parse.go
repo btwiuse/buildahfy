@@ -46,11 +46,13 @@ func main() {
 			// log.Println(i)
 			// pretty.Json(ins)
 			switch c := ins.(type) {
-			case *instructions.RunCommand:
+			case *instructions.HealthCheckCommand:
 				// pretty.Json(c)
-				translateRunCommand(c)
+				translateHealthCheckCommand(c)
 			case interface{}:
 				continue
+			case *instructions.RunCommand:
+				translateRunCommand(c)
 			case *instructions.LabelCommand:
 				translateLabelCommand(c)
 			case *instructions.MaintainerCommand:
@@ -88,6 +90,35 @@ func main() {
 }
 
 var globalid string
+
+// adapted from translateRunCommand
+func translateHealthCheckCommand(c *instructions.HealthCheckCommand) {
+	base := "buildah config %s <container>"
+	options := []string{}
+	switch c.Health.Test[0] {
+	case "NONE":
+		options = append(options, "--healthcheck NONE")
+	case "CMD":
+		options = append(options, fmt.Sprintf("--healthcheck 'CMD %s'", strings.Join(c.Health.Test[1:], " ")))
+	case "CMD-SHELL":
+		options = append(options, fmt.Sprintf("--healthcheck 'CMD-SHELL %s'", strings.Join(c.Health.Test[1:], " ")))
+	}
+	if retries := c.Health.Retries; retries != 0 {
+		options = append(options, fmt.Sprintf("--healthcheck-retries %d", retries))
+	}
+	if interval := c.Health.Interval; interval != 0 {
+		options = append(options, fmt.Sprintf("--healthcheck-interval %d", int(interval.Seconds())))
+	}
+	if startPeriod := c.Health.StartPeriod; startPeriod != 0 {
+		options = append(options, fmt.Sprintf("--healthcheck-start-period %d", int(startPeriod.Seconds())))
+	}
+	if timeout := c.Health.Timeout; timeout != 0 {
+		options = append(options, fmt.Sprintf("--healthcheck-timeout %d", int(timeout.Seconds())))
+	}
+	opts := fmt.Sprintf(`%s`, strings.Join(options, " "))
+	result := fmt.Sprintf(base, opts)
+	fmt.Println(result)
+}
 
 // adapted from translateEntrypointCommand
 // TODO: handle bash ; && ()
