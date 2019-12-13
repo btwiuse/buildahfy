@@ -46,11 +46,13 @@ func main() {
 			// log.Println(i)
 			// pretty.Json(ins)
 			switch c := ins.(type) {
-			case *instructions.LabelCommand:
+			case *instructions.RunCommand:
 				// pretty.Json(c)
-				translateLabelCommand(c)
+				translateRunCommand(c)
 			case interface{}:
 				continue
+			case *instructions.LabelCommand:
+				translateLabelCommand(c)
 			case *instructions.MaintainerCommand:
 				translateMaintainerCommand(c)
 			case *instructions.ShellCommand:
@@ -86,6 +88,26 @@ func main() {
 }
 
 var globalid string
+
+// adapted from translateEntrypointCommand
+// TODO: handle bash ; && ()
+func translateRunCommand(c *instructions.RunCommand) {
+	base := "buildah run [options] <container> %s"
+	cmd := ""
+	if c.PrependShell {
+		for _, arg := range c.CmdLine {
+			if strings.HasPrefix(arg, "-") {
+				base += " -- "
+			}
+			break
+		}
+		cmd = fmt.Sprintf("/bin/sh -c '%s'", strings.Join(c.CmdLine, " "))
+	} else { // exec form
+		cmd = fmt.Sprintf(`%s`, strings.Join(c.CmdLine, " "))
+	}
+	result := fmt.Sprintf(base, cmd)
+	fmt.Println(result)
+}
 
 func translateLabelCommand(c *instructions.LabelCommand) {
 	base := "buildah config %s <container>"
