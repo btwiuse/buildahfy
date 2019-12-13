@@ -46,11 +46,13 @@ func main() {
 			// log.Println(i)
 			// pretty.Json(ins)
 			switch c := ins.(type) {
-			case *instructions.ShellCommand:
+			case *instructions.MaintainerCommand:
 				// pretty.Json(c)
+				translateMaintainerCommand(c)
+			case interface{}:
+				continue
+			case *instructions.ShellCommand:
 				translateShellCommand(c)
-			// case interface{}:
-				// continue
 			case *instructions.CmdCommand:
 				translateCmdCommand(c)
 			case *instructions.EntrypointCommand:
@@ -82,6 +84,14 @@ func main() {
 }
 
 var globalid string
+
+// TODO: better single/double quote handling
+func translateMaintainerCommand(c *instructions.MaintainerCommand) {
+	base := "buildah config %s <container>"
+	maintainer := fmt.Sprintf(`--label maintainer='%s'`, c.Maintainer)
+	result := fmt.Sprintf(base, maintainer)
+	fmt.Println(result)
+}
 
 // adapted from translateEntrypointCommand
 func translateShellCommand(c *instructions.ShellCommand) {
