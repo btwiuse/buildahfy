@@ -46,14 +46,15 @@ func main() {
 			// log.Println(i)
 			// pretty.Json(ins)
 			switch c := ins.(type) {
+			case *instructions.ShellCommand:
+				// pretty.Json(c)
+				translateShellCommand(c)
+			// case interface{}:
+				// continue
 			case *instructions.CmdCommand:
-				// pretty.Json(c)
 				translateCmdCommand(c)
-			case interface{}:
 			case *instructions.EntrypointCommand:
-				// pretty.Json(c)
 				translateEntrypointCommand(c)
-				continue
 			case *instructions.WorkdirCommand:
 				translateWorkdirCommand(c)
 			case *instructions.ExposeCommand:
@@ -62,8 +63,6 @@ func main() {
 				translateStopSignalCommand(c)
 			case *instructions.UserCommand:
 				translateUserCommand(c)
-			case instructions.Command: // ADD ARG CMD COPY ENTRYPOINT ENV EXPOSE HEALTHCHECK LABEL MAINTAINER ONBUILD RUN SHELL STOPSIGNAL USER VOLUME WORKDIR
-				log.Println(c.Name())
 			case *instructions.EnvCommand:
 				translateEnvCommand(c)
 				pretty.JsonString(c)
@@ -73,6 +72,8 @@ func main() {
 				} else {
 					log.Println("FROM", c.BaseName, "as", c.Name)
 				}
+			case instructions.Command: // ADD ARG CMD COPY ENTRYPOINT ENV EXPOSE HEALTHCHECK LABEL MAINTAINER ONBUILD RUN SHELL STOPSIGNAL USER VOLUME WORKDIR
+				log.Println(c.Name())
 			default:
 				panic(errors.Errorf("%s", "unknown message"))
 			}
@@ -81,6 +82,14 @@ func main() {
 }
 
 var globalid string
+
+// adapted from translateEntrypointCommand
+func translateShellCommand(c *instructions.ShellCommand) {
+	base := "buildah config %s <container>"
+	shell := fmt.Sprintf(`--shell '%s'`, strings.TrimSpace(pretty.JsonString(c.Shell)))
+	result := fmt.Sprintf(base, shell)
+	fmt.Println(result)
+}
 
 // adapted from translateEntrypointCommand
 func translateCmdCommand(c *instructions.CmdCommand) {
