@@ -45,10 +45,12 @@ func main() {
 			// log.Println(i)
 			// pretty.Json(ins)
 			switch c := ins.(type) {
-			case *instructions.StopSignalCommand:
-				translateStopSignalCommand(c)
+			case *instructions.ExposeCommand:
+				translateExposeCommand(c)
 			case interface{}:
 				continue
+			case *instructions.StopSignalCommand:
+				translateStopSignalCommand(c)
 			case *instructions.UserCommand:
 				translateUserCommand(c)
 			case instructions.Command: // ADD ARG CMD COPY ENTRYPOINT ENV EXPOSE HEALTHCHECK LABEL MAINTAINER ONBUILD RUN SHELL STOPSIGNAL USER VOLUME WORKDIR
@@ -69,6 +71,17 @@ func main() {
 	}
 }
 
+func translateExposeCommand(c *instructions.ExposeCommand) {
+	base := "buildah config %s <container>"
+	ports := []string{}
+	for _, port := range c.Ports {
+		port := fmt.Sprintf("--port %s", port)
+		ports = append(ports, port)
+	}
+	result := fmt.Sprintf(base, strings.Join(ports, " "))
+	fmt.Println(result)
+}
+
 func translateStopSignalCommand(c *instructions.StopSignalCommand) {
 	base := "buildah config %s <container>"
 	signal := fmt.Sprintf("--stop-signal %s", c.Signal)
@@ -76,6 +89,7 @@ func translateStopSignalCommand(c *instructions.StopSignalCommand) {
 	fmt.Println(result)
 }
 
+// TODO: wrap shell variables in single quotes #1250
 func translateUserCommand(c *instructions.UserCommand) {
 	base := "buildah config %s <container>"
 	user := fmt.Sprintf("--user %s", c.User)
