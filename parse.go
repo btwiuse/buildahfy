@@ -41,14 +41,18 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
+		globalid = r.Id
 		for _, ins := range cmds {
 			// log.Println(i)
 			// pretty.Json(ins)
 			switch c := ins.(type) {
-			case *instructions.WorkdirCommand:
-				translateWorkdirCommand(c)
+			case *instructions.EntrypointCommand:
+				// pretty.Json(c)
+				translateEntrypointCommand(c)
 			case interface{}:
 				continue
+			case *instructions.WorkdirCommand:
+				translateWorkdirCommand(c)
 			case *instructions.ExposeCommand:
 				translateExposeCommand(c)
 			case *instructions.StopSignalCommand:
@@ -71,6 +75,28 @@ func main() {
 			}
 		}
 	}
+}
+
+var globalid string
+
+func translateEntrypointCommand(c *instructions.EntrypointCommand) {
+	base := "buildah config %s <container>"
+	entrypoint := ""
+	if c.PrependShell {
+		/* ENTRYPOINT # will unset existing entrypoints
+		if len(c.CmdLine) != 1 {
+			log.Println(len(c.CmdLine), globalid, pretty.JsonString(c), fmt.Sprintf("%+q", c.CmdLine)) // all 0
+		} */
+		entrypoint = fmt.Sprintf(`--entrypoint '%s'`, strings.Join(c.CmdLine, " "))
+	} else {
+		cmdline := []string{} // prevent --entrypoint 'null'
+		if c.CmdLine != nil {
+			cmdline = c.CmdLine
+		}
+		entrypoint = fmt.Sprintf(`--entrypoint '%s'`, strings.TrimSpace(pretty.JsonString(cmdline)))
+	}
+	result := fmt.Sprintf(base, entrypoint)
+	fmt.Println(result)
 }
 
 func translateWorkdirCommand(c *instructions.WorkdirCommand) {
