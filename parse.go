@@ -45,10 +45,12 @@ func main() {
 			// log.Println(i)
 			// pretty.Json(ins)
 			switch c := ins.(type) {
-			case *instructions.ExposeCommand:
-				translateExposeCommand(c)
+			case *instructions.WorkdirCommand:
+				translateWorkdirCommand(c)
 			case interface{}:
 				continue
+			case *instructions.ExposeCommand:
+				translateExposeCommand(c)
 			case *instructions.StopSignalCommand:
 				translateStopSignalCommand(c)
 			case *instructions.UserCommand:
@@ -69,6 +71,13 @@ func main() {
 			}
 		}
 	}
+}
+
+func translateWorkdirCommand(c *instructions.WorkdirCommand) {
+	base := "buildah config %s <container>"
+	workingdir := fmt.Sprintf("--workingdir %s", c.Path)
+	result := fmt.Sprintf(base, workingdir)
+	fmt.Println(result)
 }
 
 func translateExposeCommand(c *instructions.ExposeCommand) {
