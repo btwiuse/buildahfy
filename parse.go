@@ -46,10 +46,13 @@ func main() {
 			// log.Println(i)
 			// pretty.Json(ins)
 			switch c := ins.(type) {
+			case *instructions.CmdCommand:
+				// pretty.Json(c)
+				translateCmdCommand(c)
+			case interface{}:
 			case *instructions.EntrypointCommand:
 				// pretty.Json(c)
 				translateEntrypointCommand(c)
-			case interface{}:
 				continue
 			case *instructions.WorkdirCommand:
 				translateWorkdirCommand(c)
@@ -78,6 +81,23 @@ func main() {
 }
 
 var globalid string
+
+// adapted from translateEntrypointCommand
+func translateCmdCommand(c *instructions.CmdCommand) {
+	base := "buildah config %s <container>"
+	cmd := ""
+	if c.PrependShell {
+		cmd = fmt.Sprintf(`--cmd '%s'`, strings.Join(c.CmdLine, " "))
+	} else {
+		cmdline := []string{}
+		if c.CmdLine != nil {
+			cmdline = c.CmdLine
+		}
+		cmd = fmt.Sprintf(`--cmd '%s'`, strings.TrimSpace(pretty.JsonString(cmdline)))
+	}
+	result := fmt.Sprintf(base, cmd)
+	fmt.Println(result)
+}
 
 func translateEntrypointCommand(c *instructions.EntrypointCommand) {
 	base := "buildah config %s <container>"
