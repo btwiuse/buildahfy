@@ -45,10 +45,12 @@ func main() {
 			// log.Println(i)
 			// pretty.Json(ins)
 			switch c := ins.(type) {
-			case *instructions.UserCommand:
-				translateUserCommand(c)
+			case *instructions.StopSignalCommand:
+				translateStopSignalCommand(c)
 			case interface{}:
 				continue
+			case *instructions.UserCommand:
+				translateUserCommand(c)
 			case instructions.Command: // ADD ARG CMD COPY ENTRYPOINT ENV EXPOSE HEALTHCHECK LABEL MAINTAINER ONBUILD RUN SHELL STOPSIGNAL USER VOLUME WORKDIR
 				log.Println(c.Name())
 			case *instructions.EnvCommand:
@@ -65,6 +67,13 @@ func main() {
 			}
 		}
 	}
+}
+
+func translateStopSignalCommand(c *instructions.StopSignalCommand) {
+	base := "buildah config %s <container>"
+	signal := fmt.Sprintf("--stop-signal %s", c.Signal)
+	result := fmt.Sprintf(base, signal)
+	fmt.Println(result)
 }
 
 func translateUserCommand(c *instructions.UserCommand) {
