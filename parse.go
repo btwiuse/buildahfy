@@ -46,11 +46,13 @@ func main() {
 			// log.Println(i)
 			// pretty.Json(ins)
 			switch c := ins.(type) {
-			case *instructions.MaintainerCommand:
+			case *instructions.LabelCommand:
 				// pretty.Json(c)
-				translateMaintainerCommand(c)
+				translateLabelCommand(c)
 			case interface{}:
 				continue
+			case *instructions.MaintainerCommand:
+				translateMaintainerCommand(c)
 			case *instructions.ShellCommand:
 				translateShellCommand(c)
 			case *instructions.CmdCommand:
@@ -84,6 +86,17 @@ func main() {
 }
 
 var globalid string
+
+func translateLabelCommand(c *instructions.LabelCommand) {
+	base := "buildah config %s <container>"
+	labels := []string{}
+	for _, kv := range c.Labels {
+		label := fmt.Sprintf(`--label %s=%s`, kv.Key, kv.Value)
+		labels = append(labels, label)
+	}
+	result := fmt.Sprintf(base, strings.Join(labels, " "))
+	fmt.Println(result)
+}
 
 // TODO: better single/double quote handling
 func translateMaintainerCommand(c *instructions.MaintainerCommand) {
