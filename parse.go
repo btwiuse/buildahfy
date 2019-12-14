@@ -46,11 +46,12 @@ func main() {
 			// log.Println(i)
 			// pretty.Json(ins)
 			switch c := ins.(type) {
-				// pretty.Json(c)
-			case *instructions.AddCommand:
-				translateAddCommand(c)
+			case *instructions.OnbuildCommand:
+				translateOnbuildCommand(c)
 			case interface{}:
 				continue
+			case *instructions.AddCommand:
+				translateAddCommand(c)
 			case *instructions.CopyCommand:
 				translateCopyCommand(c)
 			case *instructions.HealthCheckCommand:
@@ -94,6 +95,13 @@ func main() {
 }
 
 var globalid string
+
+func translateOnbuildCommand(c *instructions.OnbuildCommand) {
+	base := "buildah config <container> %s"
+	onbuild := fmt.Sprintf("--onbuild '%s'", c.Expression)
+	result := fmt.Sprintf(base, onbuild)
+	fmt.Println(result)
+}
 
 func translateAddCommand(c *instructions.AddCommand) {
 	base := "buildah add %s <container> %s"
