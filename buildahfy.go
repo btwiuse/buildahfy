@@ -51,6 +51,7 @@ func main() {
 		if err := json.Unmarshal([]byte(r.Value), c); err != nil {
 			panic(err)
 		}
+		fmt.Printf("####################### %s #######################\n", r.Id)
 		Ast(strings.NewReader(c.Contents))
 	}
 }
