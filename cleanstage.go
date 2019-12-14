@@ -56,7 +56,7 @@ func main() {
 			log.Println(r.Id, err)
 			continue
 		}
-		fmt.Println(r.Value)
+		pretty.Json(r)
 	}
 }
 
