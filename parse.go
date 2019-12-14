@@ -46,11 +46,15 @@ func main() {
 			// log.Println(i)
 			// pretty.Json(ins)
 			switch c := ins.(type) {
-			case *instructions.HealthCheckCommand:
 				// pretty.Json(c)
-				translateHealthCheckCommand(c)
+			case *instructions.AddCommand:
+				translateAddCommand(c)
 			case interface{}:
 				continue
+			case *instructions.CopyCommand:
+				translateCopyCommand(c)
+			case *instructions.HealthCheckCommand:
+				translateHealthCheckCommand(c)
 			case *instructions.RunCommand:
 				translateRunCommand(c)
 			case *instructions.LabelCommand:
@@ -90,6 +94,33 @@ func main() {
 }
 
 var globalid string
+
+func translateAddCommand(c *instructions.AddCommand) {
+	base := "buildah add %s <container> %s"
+	opts := []string{}
+	if c.Chown != "" {
+		opts = append(opts, fmt.Sprintf("--chown %s", c.Chown))
+	}
+	optstr := strings.Join(opts, " ")
+	cp := strings.Join(c.SourcesAndDest, " ")
+	result := fmt.Sprintf(base, optstr, cp)
+	fmt.Println(result)
+}
+
+func translateCopyCommand(c *instructions.CopyCommand) {
+	base := "buildah copy %s <container> %s"
+	opts := []string{}
+	if c.From != "" {
+		opts = append(opts, fmt.Sprintf("--from %s", c.From))
+	}
+	if c.Chown != "" {
+		opts = append(opts, fmt.Sprintf("--chown %s", c.Chown))
+	}
+	optstr := strings.Join(opts, " ")
+	cp := strings.Join(c.SourcesAndDest, " ")
+	result := fmt.Sprintf(base, optstr, cp)
+	fmt.Println(result)
+}
 
 // adapted from translateRunCommand
 func translateHealthCheckCommand(c *instructions.HealthCheckCommand) {
