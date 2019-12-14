@@ -46,11 +46,13 @@ func main() {
 			// log.Println(i)
 			// pretty.Json(ins)
 			switch c := ins.(type) {
-			case *instructions.VolumeCommand:
 				// pretty.Json(ins)
-				translateVolumeCommand(c)
+			case *instructions.ArgCommand:
+				translateArgCommand(c)
 			case interface{}:
 				continue
+			case *instructions.VolumeCommand:
+				translateVolumeCommand(c)
 			case *instructions.OnbuildCommand:
 				translateOnbuildCommand(c)
 			case *instructions.AddCommand:
@@ -98,6 +100,19 @@ func main() {
 }
 
 var globalid string
+
+func translateArgCommand(c *instructions.ArgCommand) {
+	base := "# buildah config %s <container>"
+	arg := ""
+	kv := c.KeyValuePairOptional
+	if kv.Value == nil {
+		arg = fmt.Sprintf("--arg %s", kv.Key)
+	} else {
+		arg = fmt.Sprintf("--arg %s=%s", kv.Key, *kv.Value)
+	}
+	result := fmt.Sprintf(base, arg)
+	fmt.Println(result)
+}
 
 func translateVolumeCommand(c *instructions.VolumeCommand) {
 	base := "buildah config %s <container>"
