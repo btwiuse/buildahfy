@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"io"
 	"os"
 	"log"
 	"fmt"
@@ -33,68 +34,72 @@ func main() {
 		if err := json.Unmarshal([]byte(r.Value), c); err != nil {
 			panic(err)
 		}
-		ast, err := parser.Parse(strings.NewReader(c.Contents))
-		if err != nil {
-			panic(err)
-		}
-		cmds, err := Parse(ast.AST);
-		if err != nil {
-			panic(err)
-		}
-		globalid = r.Id
-		for _, ins := range cmds {
-			// log.Println(i)
+		Ast(strings.NewReader(c.Contents))
+	}
+}
+
+func Ast(r io.Reader) {
+	ast, err := parser.Parse(r)
+	if err != nil {
+		panic(err)
+	}
+	cmds, err := Parse(ast.AST);
+	if err != nil {
+		panic(err)
+	}
+	// globalid = r.Id
+	for _, ins := range cmds {
+		// log.Println(i)
+		// pretty.Json(ins)
+		switch c := ins.(type) {
 			// pretty.Json(ins)
-			switch c := ins.(type) {
-				// pretty.Json(ins)
-			case *instructions.ArgCommand:
-				translateArgCommand(c)
-			case interface{}:
-				continue
-			case *instructions.VolumeCommand:
-				translateVolumeCommand(c)
-			case *instructions.OnbuildCommand:
-				translateOnbuildCommand(c)
-			case *instructions.AddCommand:
-				translateAddCommand(c)
-			case *instructions.CopyCommand:
-				translateCopyCommand(c)
-			case *instructions.HealthCheckCommand:
-				translateHealthCheckCommand(c)
-			case *instructions.RunCommand:
-				translateRunCommand(c)
-			case *instructions.LabelCommand:
-				translateLabelCommand(c)
-			case *instructions.MaintainerCommand:
-				translateMaintainerCommand(c)
-			case *instructions.ShellCommand:
-				translateShellCommand(c)
-			case *instructions.CmdCommand:
-				translateCmdCommand(c)
-			case *instructions.EntrypointCommand:
-				translateEntrypointCommand(c)
-			case *instructions.WorkdirCommand:
-				translateWorkdirCommand(c)
-			case *instructions.ExposeCommand:
-				translateExposeCommand(c)
-			case *instructions.StopSignalCommand:
-				translateStopSignalCommand(c)
-			case *instructions.UserCommand:
-				translateUserCommand(c)
-			case *instructions.EnvCommand:
-				translateEnvCommand(c)
-				pretty.JsonString(c)
-			case *instructions.Stage: // from command
-				if c.Name == "" {
-					log.Println("FROM", c.BaseName)
-				} else {
-					log.Println("FROM", c.BaseName, "as", c.Name)
-				}
-			case instructions.Command: // ADD ARG CMD COPY ENTRYPOINT ENV EXPOSE HEALTHCHECK LABEL MAINTAINER ONBUILD RUN SHELL STOPSIGNAL USER VOLUME WORKDIR
-				log.Println(c.Name())
-			default:
-				panic(errors.Errorf("%s", "unknown message"))
+		//case interface{}:
+			// continue
+		case *instructions.ArgCommand:
+			translateArgCommand(c)
+		case *instructions.VolumeCommand:
+			translateVolumeCommand(c)
+		case *instructions.OnbuildCommand:
+			translateOnbuildCommand(c)
+		case *instructions.AddCommand:
+			translateAddCommand(c)
+		case *instructions.CopyCommand:
+			translateCopyCommand(c)
+		case *instructions.HealthCheckCommand:
+			translateHealthCheckCommand(c)
+		case *instructions.RunCommand:
+			translateRunCommand(c)
+		case *instructions.LabelCommand:
+			translateLabelCommand(c)
+		case *instructions.MaintainerCommand:
+			translateMaintainerCommand(c)
+		case *instructions.ShellCommand:
+			translateShellCommand(c)
+		case *instructions.CmdCommand:
+			translateCmdCommand(c)
+		case *instructions.EntrypointCommand:
+			translateEntrypointCommand(c)
+		case *instructions.WorkdirCommand:
+			translateWorkdirCommand(c)
+		case *instructions.ExposeCommand:
+			translateExposeCommand(c)
+		case *instructions.StopSignalCommand:
+			translateStopSignalCommand(c)
+		case *instructions.UserCommand:
+			translateUserCommand(c)
+		case *instructions.EnvCommand:
+			translateEnvCommand(c)
+			pretty.JsonString(c)
+		case *instructions.Stage: // from command
+			if c.Name == "" {
+				fmt.Println("buildah from", c.BaseName)
+			} else {
+				fmt.Println("buildah from --name", c.Name, c.BaseName)
 			}
+		case instructions.Command: // ADD ARG CMD COPY ENTRYPOINT ENV EXPOSE HEALTHCHECK LABEL MAINTAINER ONBUILD RUN SHELL STOPSIGNAL USER VOLUME WORKDIR
+			log.Println(c.Name())
+		default:
+			panic(errors.Errorf("%s", "unknown message"))
 		}
 	}
 }
