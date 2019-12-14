@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io"
 	"os"
+	"flag"
 	"log"
 	"fmt"
 	"strings"
@@ -23,7 +24,23 @@ type Response struct {
 	Contents string
 }
 
+type Config struct {
+	json bool
+}
+
+func parseFlags() *Config {
+	opt := &Config{}
+	flag.BoolVar(&opt.json, "json", false, "input is pd json stream")
+	flag.Parse()
+	return opt
+}
+
 func main() {
+	config := parseFlags()
+	if !config.json {
+		Ast(os.Stdin)
+		return
+	}
 	dec := json.NewDecoder(os.Stdin)
 	r := &Result{}
 	c := &Response{}
